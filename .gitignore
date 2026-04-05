@@ -1,0 +1,32 @@
+# API Keys & Credentials
+.env
+.env.local
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Application State & Buffers
+.kb_buffer/
+.kb_manifest.json
+
+# IDEs & Editor Configs
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

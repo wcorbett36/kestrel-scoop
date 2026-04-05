@@ -1,0 +1,31 @@
+output_dir: "./wiki"
+llm_model: "openai/punchcard-coder" # Routing seamlessly to local compute
+
+projects:
+  - name: "artemis_home"
+    path: "../../artemis_home"
+    focus: "Core steering systems and architecture"
+    include: 
+      - "README.md"
+      - "**/*.md"
+      
+  - name: "kestrel-systems"
+    path: "../../kestrel-systems"
+    focus: "Workflow tooling, local testing tools, edge gateways"
+    include: 
+      - "README.md"
+      - "**/*.md"
+
+  - name: "repo_strategy"
+    path: "../../repo_strategy"
+    focus: "DecisionOps strategy, tracking, and rationalization logic"
+    include: 
+      - "README.md"
+      - "**/*.md"
+
+  - name: "trust-systems"
+    path: "../../trust-systems"
+    focus: "Policy, constraints, security, OPA layers"
+    include: 
+      - "README.md"
+      - "**/*.md"
