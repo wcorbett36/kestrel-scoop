@@ -1,24 +1,24 @@
 {
   "main": {
-    "id": "9c65dce1a0090e43",
+    "id": "2fba2cfe6c723ba2",
     "type": "split",
     "children": [
       {
-        "id": "aeeb58f319185605",
+        "id": "81ac75fad411623b",
         "type": "tabs",
         "children": [
           {
-            "id": "4afd3cd38c1e17a2",
+            "id": "b4a2f6775294e31a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Project_Nodes/trust-systems.md",
+                "file": "02_Strategic_Views/Global_Ecosystem_Status.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "trust-systems"
+              "title": "Global_Ecosystem_Status"
             }
           }
         ]
@@ -27,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "bb9c6a99d87d0478",
+    "id": "5910ff03262c5e2e",
     "type": "split",
     "children": [
       {
-        "id": "1cac0d02d3e8fd96",
+        "id": "38f495e777323e25",
         "type": "tabs",
         "children": [
           {
-            "id": "0261b51be74886a2",
+            "id": "572b1abaedd2c523",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +48,7 @@
             }
           },
           {
-            "id": "4277c38782b6d988",
+            "id": "aeb262023f1b43a4",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +65,7 @@
             }
           },
           {
-            "id": "9bceaef21563b908",
+            "id": "c6284a91c738fcdf",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,20 +81,20 @@
     "width": 300
   },
   "right": {
-    "id": "d680659b98dd2b9e",
+    "id": "6a551f2650dc3d6d",
     "type": "split",
     "children": [
       {
-        "id": "70a8bfc999d44b12",
+        "id": "15a44a7990f66912",
         "type": "tabs",
         "children": [
           {
-            "id": "6f53e56344abb212",
+            "id": "28dd6ec5655f49b4",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "01_Project_Nodes/trust-systems.md",
+                "file": "02_Strategic_Views/Global_Ecosystem_Status.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for trust-systems"
+              "title": "Backlinks for Global_Ecosystem_Status"
             }
           },
           {
-            "id": "3973dd50b84ab916",
+            "id": "9aa63532115d5672",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "01_Project_Nodes/trust-systems.md",
+                "file": "02_Strategic_Views/Global_Ecosystem_Status.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from trust-systems"
+              "title": "Outgoing links from Global_Ecosystem_Status"
             }
           },
           {
-            "id": "cb95d1d3c654dc00",
+            "id": "47b4690c080e10a2",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,7 +137,7 @@
             }
           },
           {
-            "id": "ad85f0e7ac28b9d2",
+            "id": "d79236b448a5306d",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -151,18 +151,18 @@
             }
           },
           {
-            "id": "4bce924d6516e2bf",
+            "id": "8a00e1a5519c43fc",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "01_Project_Nodes/trust-systems.md",
+                "file": "02_Strategic_Views/Global_Ecosystem_Status.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of trust-systems"
+              "title": "Outline of Global_Ecosystem_Status"
             }
           }
         ]
@@ -183,13 +183,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "4afd3cd38c1e17a2",
+  "active": "b4a2f6775294e31a",
   "lastOpenFiles": [
-    "01_Project_Nodes/repo_strategy.md",
+    "02_Strategic_Views/Gaps_and_Opportunities.md",
+    "02_Strategic_Views/Ecosystem_Integration_Analysis.md",
+    "01_Project_Nodes/kestrel-scoop.md",
     "01_Project_Nodes/artemis_home.md",
+    "01_Project_Nodes/punchcard-coder.md",
+    "01_Project_Nodes/steering.md",
+    "01_Project_Nodes/punchcard-modelbase-mlx.md",
+    "04_Source_Reference/Source_Document_Index.md",
+    "04_Source_Reference",
+    "00_Home.md",
     "03_Maps/Index.md",
-    "02_Strategic_Views/Global_Ecosystem_Status.md",
-    "01_Project_Nodes/trust-systems.md",
-    "01_Project_Nodes/kestrel-systems.md"
+    "02_Strategic_Views/Global_Ecosystem_Status.md"
   ]
 }

@@ -47,16 +47,16 @@ def test_crawler_initial_run(tmp_path):
     # We expect 2 files to have been crawled
     assert "Data-Observability-Svc" in results
     buffered_files = results["Data-Observability-Svc"]
-    assert len(buffered_files) == 2
+    assert len(buffered_files["changed"]) == 2
     
     # Let's verify they actually got copied
     assert (buffer_dir / "Data-Observability-Svc" / "README.md").exists()
     assert (buffer_dir / "Data-Observability-Svc" / "docs" / "architecture.md").exists()
     
     # Mark them in the tracker as processed. (In real life, this would happen AFTER synthesis)
-    tracker.update_record(project_dir / "README.md")
-    tracker.update_record(project_dir / "docs" / "architecture.md")
+    tracker.update_file_record(project_dir / "README.md")
+    tracker.update_file_record(project_dir / "docs" / "architecture.md")
     
     # Re-run crawler
     results2 = crawler.process()
-    assert len(results2["Data-Observability-Svc"]) == 0
+    assert len(results2["Data-Observability-Svc"]["changed"]) == 0

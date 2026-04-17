@@ -19,7 +19,7 @@ def test_manifest_tracker_unchanged_file(tmp_path):
     test_file = tmp_path / "test.md"
     test_file.write_text("Hello World!")
     
-    tracker.update_record(test_file)
+    tracker.update_file_record(test_file)
     
     # Reload tracker
     tracker2 = ManifestTracker(str(manifest_file))
@@ -32,7 +32,7 @@ def test_manifest_tracker_modified_file(tmp_path):
     test_file = tmp_path / "test.md"
     test_file.write_text("Hello World!")
     
-    tracker.update_record(test_file)
+    tracker.update_file_record(test_file)
     
     test_file.write_text("Hello World! Edited.")
     

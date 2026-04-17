@@ -27,6 +27,12 @@ projects:
 
 > **Note:** Paths are relative from the location of where `src/cli.py` is invoked. It matches expressions intelligently via `pathlib.rglob`.
 
+For **local / MLX-sized contexts**, keep `chunk_repo_synthesis: true` (default): each markdown file (and long-file segments bounded by `max_chunk_chars`) is summarized first, then merged into one project profile. Set `chunk_repo_synthesis: false` for a single prompt per project when using a large-context cloud model. See [ROADMAP.md](ROADMAP.md).
+
+### Build resiliency (fail-fast)
+
+`python src/cli.py build` **stops on the first error** (clear Rich panel: step, project, detail). If **`OPENAI_API_BASE`** is set, the CLI runs a **`GET /health`** preflight on the server root before synthesis (use **`--skip-preflight`** to skip, e.g. offline routing). **`LLM_MAX_RETRIES`** (default `0`) retries **`litellm.completion`** only on **transient** connection/timeout errors; optional **`LLM_RETRY_BACKOFF_SECONDS`** (default `0.5`) spaces retries. Set **`K_COMPILER_DEBUG=1`** to print a full traceback after a failure. If **strategic view** synthesis fails after project nodes were written, the panel reminds you that **`./wiki`** and **`.kb_manifest.json`** may already be updated—fix the backend and re-run.
+
 ## 💻 Manual Execution Guide
 
 To kick off your ingestion runs seamlessly:

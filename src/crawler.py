@@ -27,6 +27,19 @@ class KBConfig:
     def projects(self) -> List[Dict[str, Any]]:
         return self.config.get("projects", [])
 
+    @property
+    def chunk_repo_synthesis(self) -> bool:
+        """When True, map/reduce per file (and segments) then merge to ProjectProfile."""
+        return bool(self.config.get("chunk_repo_synthesis", True))
+
+    @property
+    def max_chunk_chars(self) -> int:
+        """Split files longer than this into multiple map calls (character budget, rough tokens)."""
+        v = self.config.get("max_chunk_chars")
+        if v is None:
+            return 48_000
+        return max(1, int(v))
+
 class DocCrawler:
     def __init__(self, config: KBConfig, tracker: ManifestTracker, buffer_dir: str = ".kb_buffer"):
         self.config = config
@@ -40,12 +53,13 @@ class DocCrawler:
             shutil.rmtree(self.buffer_dir)
         self.buffer_dir.mkdir(parents=True, exist_ok=True)
 
-    def process(self) -> Dict[str, List[Path]]:
+    def process(self) -> Dict[str, Dict[str, List[Any]]]:
         """
         Crawls the configured projects and copies changed files to the context buffer.
-        Returns a mapping of project names to their buffered file paths.
+        Returns a mapping of project names to their file state:
+          { "changed": [(source_path, dest_path), ...], "unchanged": [source_path, ...] }
         """
-        buffered_files_by_project = {}
+        results_by_project = {}
 
         for project in self.config.projects:
             name = project.get("name")
@@ -53,7 +67,8 @@ class DocCrawler:
             base_path = Path(base_str_path).expanduser().resolve()
             includes = project.get("include", [])
 
-            buffered_files = []
+            changed = []
+            unchanged = []
 
             for pattern in includes:
                 # Resolve globs from the base path context
@@ -65,11 +80,13 @@ class DocCrawler:
                             
                         if self.tracker.is_changed(matched_file):
                             buffered_path = self._copy_to_buffer(name, base_path, matched_file)
-                            buffered_files.append((matched_file, buffered_path))
+                            changed.append((matched_file, buffered_path))
+                        else:
+                            unchanged.append(matched_file)
 
-            buffered_files_by_project[name] = buffered_files
+            results_by_project[name] = {"changed": changed, "unchanged": unchanged}
 
-        return buffered_files_by_project
+        return results_by_project
 
     def _copy_to_buffer(self, project_name: str, base_path: Path, target_file: Path) -> Path:
         """Copies the target_file to the buffer, preserving relative structure under the project name."""

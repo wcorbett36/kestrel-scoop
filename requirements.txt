@@ -3,3 +3,6 @@ litellm
 pydantic
 pytest
 pyyaml
+rich
+python-dotenv
+requests
