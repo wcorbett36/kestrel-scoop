@@ -1,37 +1,31 @@
 ---
 tags:
-  - strategic-view
-  - Documentation
-  - Knowledge Management
-  - Artemis Ecosystem
-  - Obsidian Wiki
-last_compiled: '2026-04-05'
-strategic_focus: State of documentation and cross-repo alignment
+- strategic-view
+- observability
+- trust
+- AI infrastructure
+- content management
+- ML model management
+- repository strategy
+- enterprise decision-making
+- local-first architecture
+- policy enforcement
+- OpenTelemetry
+- Jaeger
+- OPA
+last_compiled: '2026-04-17'
+strategic_focus: State of Observability and Trust in AI Infrastructure
 ---
-
-# Global ecosystem status
+# State of Observability and Trust in AI Infrastructure
 
 ## Overview
+This thematic view synthesizes projects focused on observability and trust in AI infrastructure, highlighting strategic gaps and opportunities for improvement. The projects cover various aspects of AI platform development, including content management, ML model management, repository strategy, and enterprise decision-making systems. By addressing these gaps, the ecosystem can enhance its ability to ensure trustworthiness, reliability, and observability across different components and domains.
 
-The **Artemis** workspace combines **Kestrel** tooling (documentation synthesis, local inference adapters) and **Trust** tooling (policy, decision traces, evidence). This vault is generated and curated under `kestrel-scoop/wiki` so teams can browse relationships in **Obsidian** with consistent frontmatter and wikilinks.
-
-**kestrel-scoop** implements `Source → Mirror → Synthesis → Generation`: crawl configured repos for markdown, track hashes in `.kb_manifest.json`, optionally call an LLM for structured profiles, and emit Obsidian-friendly pages.
-
-## Repository status (high level)
-
-| Repo | Role | Maturity (per docs) |
-|------|------|------------------------|
-| [[01_Project_Nodes/kestrel-scoop]] | Doc pipeline + this vault | Active; chunked synthesis for local LLMs |
-| [[01_Project_Nodes/punchcard-coder]] | Punchcard workload (local coder API) | Active development; v0 scope explicit |
-| [[01_Project_Nodes/punchcard-modelbase-mlx]] | MLX OpenAI-compatible host | Control-plane stable pattern |
-| [[01_Project_Nodes/steering]] | Decision trace gateway lab | Scaffold + roadmap phases 0–5 |
-
-## Where to go next
-
-- Integration narrative: [[Ecosystem_Integration_Analysis]]
-- Gaps and follow-ups: [[Gaps_and_Opportunities]]
-- Full markdown path index: [[04_Source_Reference/Source_Document_Index]]
-
-## Historical ecosystem gaps (superseded by deeper analysis)
-
-Earlier notes mentioned only generic documentation fragmentation. See [[Gaps_and_Opportunities]] for a **repo-specific** gap list.
+## Ecosystem Gaps
+- Lack of concrete artifacts at E3 level in the Artemis Home project
+- Need for more detailed guidelines on content syndication and distribution in Artemis Home
+- Integration and testing gaps in Kestrel Systems for robustness and reliability
+- Detailed documentation and user guides needed for Kestrel Systems
+- Completion of tactical gaps in Compute & Execution, Trust & Governance, and Publishing domains in repo_strategy
+- Enhanced threat modeling and integration with GitOps, Helm charts, and advanced testing of OPA policies in trust-systems
+- Documentation gaps for advanced usage, troubleshooting, and scalability/performance in trust-systems

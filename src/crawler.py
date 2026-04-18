@@ -77,6 +77,10 @@ class DocCrawler:
                         # Only handle md files as per specification constraints
                         if matched_file.suffix.lower() not in [".md"]:
                             continue
+                        
+                        # Exclude hidden directories and standard environment folders
+                        if any(p.startswith(".") or p in ("venv", "env", "node_modules", "site-packages") for p in matched_file.parts):
+                            continue
                             
                         if self.tracker.is_changed(matched_file):
                             buffered_path = self._copy_to_buffer(name, base_path, matched_file)
