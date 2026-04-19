@@ -2,6 +2,7 @@ import yaml
 from pathlib import Path
 from datetime import datetime
 from src.synthesizer import ProjectProfile, StrategicView
+from src.ontology import ProjectOntologyState
 
 class ObsidianFormatter:
     def __init__(self, output_dir: str = "./wiki"):
@@ -14,6 +15,7 @@ class ObsidianFormatter:
         (self.output_dir / "02_Strategic_Views").mkdir(parents=True, exist_ok=True)
         (self.output_dir / "03_Maps").mkdir(parents=True, exist_ok=True)
         (self.output_dir / "04_Assets").mkdir(parents=True, exist_ok=True)
+        (self.output_dir / "05_Ontologies").mkdir(parents=True, exist_ok=True)
 
     def _generate_frontmatter(self, tags: list[str], strategic_focus: str = "") -> str:
         date_str = datetime.now().strftime("%Y-%m-%d")
@@ -69,4 +71,38 @@ class ObsidianFormatter:
             
         file_path = self.output_dir / "03_Maps" / "Index.md"
         file_path.write_text(content, encoding="utf-8")
+        return file_path
+
+    def write_ontology_state(self, project_name: str, state: ProjectOntologyState) -> Path:
+        content = self._generate_frontmatter(tags=["ontology", "state", project_name], strategic_focus=state.schema_definition.ontology_name)
+        content += f"# Ontology State: {project_name}\n\n"
+        
+        content += "## Schema Definition\n"
+        content += f"**Domain:** {state.schema_definition.ontology_name}\n"
+        content += f"**Focus:** {state.schema_definition.extraction_focus}\n\n"
+        
+        content += "### Core Entities Tracked\n"
+        for entity in state.schema_definition.entities:
+            content += f"- {entity}\n"
+            
+        content += "\n### Structural Relationships\n"
+        for rel in state.schema_definition.relationships:
+            content += f"- {rel}\n"
+            
+        content += "\n## Harvested Knowledge Graph\n"
+        content += "### Project Entities Discovered\n"
+        for ent in state.key_entities:
+            content += f"- {ent}\n"
+            
+        content += "\n### Fact Index (Derived Assertions)\n"
+        for fact in state.aggregated_facts:
+            content += f"- {fact}\n"
+
+        file_path = self.output_dir / "05_Ontologies" / f"{project_name}_ontology.md"
+        file_path.write_text(content, encoding="utf-8")
+        
+        # Also write the raw pure YAML dump for programmatic ingestion
+        dump_path = self.output_dir / "05_Ontologies" / f"{project_name}_ontology.yaml"
+        dump_path.write_text(yaml.dump(state.model_dump(), sort_keys=False), encoding="utf-8")
+        
         return file_path

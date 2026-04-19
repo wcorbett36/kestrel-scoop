@@ -24,6 +24,10 @@ class KBConfig:
         return self.config.get("llm_model", "gemini-1.5-pro")
 
     @property
+    def frontier_model(self) -> str:
+        return self.config.get("frontier_model", "gemini/gemini-2.0-flash")
+
+    @property
     def projects(self) -> List[Dict[str, Any]]:
         return self.config.get("projects", [])
 

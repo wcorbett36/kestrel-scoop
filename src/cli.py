@@ -14,6 +14,7 @@ from src.crawler import KBConfig, DocCrawler
 from src.manifest import ManifestTracker
 from src.synthesizer import StrategicSynthesizer, split_text_segments, ProjectProfile, DocChunkSummary
 from src.obsidian import ObsidianFormatter
+from src.ontology import OntologyDefiner, OntologyHarvester
 from src.errors import BuildError, SynthesisStep
 from src.preflight import check_local_llm_reachable
 
@@ -240,8 +241,71 @@ def clean():
             else:
                 path.unlink()
             console.print(f"[green]Cleaned {path_str}[/green]")
-    console.print("[bold green]Environment is clean.[/bold green]")
+@app.command()
+def extract_ontology(
+    config_file: str = typer.Option("config.yaml", "--config", "-c", help="Path to config.yaml"),
+    manifest_file: str = typer.Option(".kb_manifest.json", "--manifest", "-m", help="Path to manifest state"),
+):
+    """
+    Two-Tier Process: Generates a deep ontology per repo via Frontier LLM,
+    harvests facts via Local LLM, and drops knowledge artifacts directly into wiki.
+    """
+    console.print("[bold green]Starting Two-Tier Ontology Extraction...[/bold green]")
+    try:
+        config = KBConfig(config_file)
+        tracker = ManifestTracker(manifest_file)
+        crawler = DocCrawler(config, tracker)
+        synthesizer = StrategicSynthesizer(config)
+        definer = OntologyDefiner(synthesizer)
+        harvester = OntologyHarvester(synthesizer)
+        formatter = ObsidianFormatter(config.output_dir)
 
+        console.print("[cyan]Crawling repositories...[/cyan]")
+        results_by_project = crawler.process()
+
+        for project_name, file_state in results_by_project.items():
+            console.print(f"\\n[bold]Processing {project_name}[/bold]")
+            changed_files = file_state.get("changed", [])
+            unchanged_files = file_state.get("unchanged", [])
+            
+            project_config = next((p for p in config.projects if p.get("name") == project_name), {})
+            focus = project_config.get("focus", "General codebase")
+            
+            console.print(f"  [cyan]1. Requesting Frontier LLM to build ontology schema for '{focus}'...[/cyan]")
+            schema = definer.build_schema(project_name, focus)
+            
+            chunks = []
+            console.print(f"  [cyan]2. Local LLM harvesting facts against schema...[/cyan]")
+            for item in changed_files:
+                source_file, buffered_file = item
+                text = buffered_file.read_text(encoding="utf-8")
+                segments = split_text_segments(text, config.max_chunk_chars)
+                for i, seg in enumerate(segments):
+                    chunks.append(harvester.extract_facts(f"{source_file.name} [{i}]", seg, schema))
+
+            for source_file in unchanged_files:
+                text = source_file.read_text(encoding="utf-8")
+                segments = split_text_segments(text, config.max_chunk_chars)
+                for i, seg in enumerate(segments):
+                    chunks.append(harvester.extract_facts(f"{source_file.name} [{i}]", seg, schema))
+                    
+            if not chunks:
+                console.print("  [yellow]No docs found to harvest.[/yellow]")
+                continue
+                
+            console.print(f"  [cyan]3. Frontier LLM merging {len(chunks)} extracted chunks into structural state...[/cyan]")
+            state = harvester.merge_facts(project_name, schema, chunks)
+            
+            out_path = formatter.write_ontology_state(project_name, state)
+            console.print(f"  [green]Ontology state recorded to {out_path}[/green]")
+            
+        console.print("\\n[bold green]Ontology Extraction Complete![/bold green]")
+        
+    except Exception as e:
+        console.print(f"[bold red]Unexpected error:[/bold red] {e}")
+        if os.getenv("K_COMPILER_DEBUG"):
+            console.print_exception()
+        raise typer.Exit(code=1)
 
 if __name__ == "__main__":
     app()

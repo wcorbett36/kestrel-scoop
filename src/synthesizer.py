@@ -108,7 +108,7 @@ class StrategicSynthesizer:
         self.config = config
         self.model = format_model_name(self.config.llm_model)
         
-    def _call_llm(self, prompt: str, schema: Type[T]) -> T:
+    def _call_llm(self, prompt: str, schema: Type[T], use_frontier: bool = False) -> T:
         keys_list = ", ".join(schema.model_fields.keys())
         system_msg = (
             "You are a Strategic Architect. Ignore implementation details like variable names or setup instructions; "
@@ -125,16 +125,24 @@ class StrategicSynthesizer:
         full_system_msg = f"{system_msg}\n\nSCHEMA:\n{schema_dump}"
 
         completion_kwargs: Dict[str, Any] = {}
-        api_base = os.getenv("OPENAI_API_BASE")
-        if api_base:
-            completion_kwargs["api_base"] = api_base
-            # Local MLX runs can exceed default HTTP timeouts on large doc batches.
-            completion_kwargs["timeout"] = float(
-                os.getenv("LLM_REQUEST_TIMEOUT_SECONDS", "1800")
-            )
-        api_key = os.getenv("OPENAI_API_KEY")
-        if api_key:
-            completion_kwargs["api_key"] = api_key
+        target_model = self.model
+
+        if use_frontier:
+            target_model = format_model_name(self.config.frontier_model)
+            # When using frontier, we rely on the native provider's environment variables
+            # (like GEMINI_API_KEY) and avoid forcing the local API base.
+        else:
+            api_base = os.getenv("OPENAI_API_BASE")
+            if api_base:
+                completion_kwargs["api_base"] = api_base
+                # Local MLX runs can exceed default HTTP timeouts on large doc batches.
+                completion_kwargs["timeout"] = float(
+                    os.getenv("LLM_REQUEST_TIMEOUT_SECONDS", "1800")
+                )
+            # Only use OPENAI_API_KEY override for the local model if specified
+            api_key = os.getenv("OPENAI_API_KEY")
+            if api_key:
+                completion_kwargs["api_key"] = api_key
 
         max_retries = max(0, int(os.getenv("LLM_MAX_RETRIES", "0")))
         backoff = float(os.getenv("LLM_RETRY_BACKOFF_SECONDS", "0.5"))
@@ -142,7 +150,7 @@ class StrategicSynthesizer:
         for attempt in range(max_retries + 1):
             try:
                 response = litellm.completion(
-                    model=self.model,
+                    model=target_model,
                     messages=[
                         {"role": "system", "content": full_system_msg},
                         {"role": "user", "content": prompt},

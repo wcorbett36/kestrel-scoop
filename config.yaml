@@ -1,6 +1,8 @@
 output_dir: "./wiki"
 # Use the same id the MLX server advertises in GET /v1/models (rolodex name alone is not a HF repo id).
 llm_model: "openai/mlx-community/Qwen2.5-Coder-7B-Instruct-4bit"
+# Frontier LLM used for high-level schema generation and cross-repo synthesis
+frontier_model: "gemini/gemini-2.0-flash"
 # Map/reduce: one LLM call per file (and per segment if file exceeds max_chunk_chars), then merge to ProjectProfile.
 chunk_repo_synthesis: true
 # Omit to default 48000; set higher if your backend has a huge context window and you want fewer segments.
